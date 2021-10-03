@@ -5,18 +5,21 @@ const path = require('path');
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
-
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+  }
   });
+  const remote = require("@electron/remote/main");
 
-  // and load the index.html of the app.
+  remote.initialize()
+  remote.enable(mainWindow.webContents)
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
